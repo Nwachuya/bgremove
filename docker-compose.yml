@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - uploads:/app/uploads
+      - processed:/app/processed
+      - ./database.db:/app/database.db
+    environment:
+      - FLASK_ENV=production
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+
+volumes:
+  uploads:
+  processed:
+  database:
